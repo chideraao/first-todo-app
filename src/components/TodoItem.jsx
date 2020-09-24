@@ -21,7 +21,13 @@ export class TodoItem extends Component {
 					/>{" "}
 					{"    "}
 					{title}
-					<button style={btnStyle}> X</button>
+					<button
+						onClick={this.props.handleDelete.bind(this, id)}
+						style={btnStyle}
+					>
+						{" "}
+						X
+					</button>
 				</p>
 			</div>
 		);
