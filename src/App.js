@@ -9,6 +9,7 @@ import Axios from "axios";
 class App extends Component {
 	state = {
 		todos: [],
+		search: "",
 	};
 
 	componentDidMount() {
@@ -28,6 +29,13 @@ class App extends Component {
 			}),
 		});
 	};
+	//handle search change
+	handleChange = (e) => {
+		this.setState({
+			[e.target.name]: e.target.value,
+		});
+	};
+
 	//handle delete
 	handleDelete = (id) => {
 		Axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`).then(
@@ -50,6 +58,14 @@ class App extends Component {
 			})
 		);
 	};
+	// search logic
+	searchText = (search) => {
+		return this.state.todos.filter(
+			(todo) =>
+				todo.title.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
+		);
+	};
+
 	render() {
 		return (
 			<Router>
@@ -61,12 +77,24 @@ class App extends Component {
 							path="/"
 							render={(props) => (
 								<React.Fragment>
-									<AddTodo addTodo={this.addTodo} />
+									<input
+										type="text"
+										name="search"
+										placeholder="Search todos..."
+										style={{
+											display: "inline-block",
+											width: "50vw",
+											padding: "5px",
+										}}
+										value={this.state.search}
+										onChange={this.handleChange}
+									/>
 									<Todos
-										todos={this.state.todos}
+										todos={this.searchText()}
 										markComplete={this.markComplete}
 										handleDelete={this.handleDelete}
 									/>
+									<AddTodo addTodo={this.addTodo} />
 								</React.Fragment>
 							)}
 						/>
